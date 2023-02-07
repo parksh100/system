@@ -69,13 +69,44 @@ export default {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in
+          this.$swal('로그인 성공')
           const user = userCredential.user
           console.log(user)
+          console.log(user.email)
+          this.user.email = user.email
+
+          this.$store.commit('user/setUser', {
+            //             name: res.data.userData.user_name,
+            email: user.email
+            //             role: res.data.userData.user_role,
+            //             id: res.data.userData.user_id,
+            //             pw: res.data.userData.user_pw,
+            //             code: res.data.userData.user_auditable_code,
+            //             yn: res.data.userData.user_yn
+            //           })
+          })
         })
         .catch((error) => {
           const errorCode = error.code
           const errorMessage = error.message
           console.log(errorCode, errorMessage)
+          // this.$swal('로그인 실패!, 다시 시도해주세요.')
+          switch (errorCode) {
+            case 'auth/invalid-email':
+              this.$swal('이메일 형식이 올바르지 않습니다.')
+              break
+            case 'auth/user-disabled':
+              this.$swal('사용자가 비활성화 되었습니다.')
+              break
+            case 'auth/user-not-found':
+              this.$swal('존재하지 않는 사용자입니다.')
+              break
+            case 'auth/wrong-password':
+              this.$swal('비밀번호가 일치하지 않습니다.')
+              break
+            default:
+              this.$swal('로그인 실패!, 다시 시도해주세요.')
+          }
         })
     }
 
