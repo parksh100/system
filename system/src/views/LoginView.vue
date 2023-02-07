@@ -44,8 +44,9 @@
   </main>
 </template>
 <script>
-import { auth } from '@/firebase/firebase.js'
+// import auth module
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/firebase/firebase-config'
 
 export default {
   components: {},
@@ -64,6 +65,7 @@ export default {
   unmounted() {},
   methods: {
     login() {
+      // const auth = getAuth()
       const email = this.user.email
       const password = this.user.pw
       signInWithEmailAndPassword(auth, email, password)
@@ -85,6 +87,7 @@ export default {
             //             yn: res.data.userData.user_yn
             //           })
           })
+          this.$router.push({ path: '/user/list' })
         })
         .catch((error) => {
           const errorCode = error.code
